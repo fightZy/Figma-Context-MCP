@@ -189,7 +189,7 @@ export function parseFigmaResponse(data: GetFileResponse | GetFileNodesResponse)
 }
 
 // Helper function to find node by ID
-const findNodeById = (id: string, nodes: SimplifiedNode[]): SimplifiedNode | undefined => {
+export const findNodeById = (id: string, nodes: SimplifiedNode[]): SimplifiedNode | undefined => {
   for (const node of nodes) {
     if (node?.id === id) {
       return node;
