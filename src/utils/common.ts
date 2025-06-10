@@ -7,6 +7,7 @@ import type {
   CSSRGBAColor,
   SimplifiedFill,
 } from "~/services/simplify-node-response.js";
+import { randomUUID } from "crypto";
 
 export type StyleId = `${string}_${string}` & { __brand: "StyleId" };
 
@@ -206,15 +207,15 @@ export function formatRGBAColor(color: RGBA, opacity = 1): CSSRGBAColor {
  * @returns A 6-character random ID string with prefix
  */
 export function generateVarId(prefix: string = "var"): StyleId {
-  const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  let result = "";
+  // const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  // let result = "";
 
-  for (let i = 0; i < 6; i++) {
-    const randomIndex = Math.floor(Math.random() * chars.length);
-    result += chars[randomIndex];
-  }
+  // for (let i = 0; i < 6; i++) {
+  //   const randomIndex = Math.floor(Math.random() * chars.length);
+  //   result += chars[randomIndex];
+  // }
 
-  return `${prefix}_${result}` as StyleId;
+  return `${prefix}_${randomUUID().slice(0, 6)}` as StyleId;
 }
 
 /**
