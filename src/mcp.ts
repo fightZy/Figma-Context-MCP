@@ -1,10 +1,11 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { FigmaService, type FigmaAuthOptions } from "./services/figma.js";
-import type { SimplifiedDesign } from "./services/simplify-node-response.js";
+import type { SimplifiedDesign, SimplifiedNode } from "./services/simplify-node-response.js";
 import { Logger } from "./utils/logger.js";
 import { calcStringSize } from "./utils/calc-string-size.js";
 import yaml from "js-yaml";
+import { removeUnusedComponentsAndStyles } from "./utils/common.js";
 
 const serverInfo = {
   name: "Figma MCP Server",
@@ -37,6 +38,18 @@ const nodeIdDescription =
 const depthDescription =
   "Optional parameter, Controls how many levels deep to traverse the node tree";
 
+function transformDesign(design: SimplifiedDesign): {
+  nodes: SimplifiedNode[];
+  globalVars: SimplifiedDesign["globalVars"];
+  metadata: Pick<SimplifiedDesign, "name" | "lastModified" | "thumbnailUrl">;
+} {
+  const { nodes, globalVars, ...metadata } = design;
+  return {
+    nodes,
+    globalVars,
+    metadata,
+  };
+}
 function registerTools(
   server: McpServer,
   figmaService: FigmaService,
@@ -163,32 +176,53 @@ Retrieve and implement ONE screen/component at a time. Don't try to understand t
         }
 
         Logger.log(`Successfully fetched file: ${file.name}`);
-        const { nodes, globalVars, ...metadata } = file;
 
-        const result = {
-          metadata,
-          nodes,
-          globalVars,
-        };
+        const result = transformDesign(file);
 
         Logger.log(`Generating ${outputFormat.toUpperCase()} result from file`);
-        const formattedResult =
-          outputFormat === "json" ? JSON.stringify(result, null, 2) : yaml.dump(result);
-        const formattedResultSize = calcStringSize(formattedResult);
+
+        const getFormattedResult = (result: ReturnType<typeof transformDesign>) => {
+          return outputFormat === "json" ? JSON.stringify(result, null, 2) : yaml.dump(result);
+        };
+
+        let formattedResult = getFormattedResult(result);
+        let formattedResultSize = calcStringSize(formattedResult);
 
         Logger.log(`Data size: ${formattedResultSize} KB (${outputFormat.toUpperCase()})`);
 
-        if (sizeLimit && formattedResultSize > sizeLimit) {
-          Logger.log(`Data size exceeds ${sizeLimit} KB, performing truncated reading`);
-          return {
-            isError: true,
-            content: [
-              {
-                type: "text",
-                text: `The data size of file ${fileKey} ${nodeId ? `node ${nodeId}` : ""} is ${formattedResultSize} KB, exceeded the limit of ${sizeLimit} KB, please performing truncated reading`,
-              },
-            ],
-          };
+        const overSizeLimit = sizeLimit && formattedResultSize > sizeLimit;
+        const depthLimit = !depth || depth > 1;
+
+        if (overSizeLimit) {
+          Logger.log(`Data size ${formattedResultSize} KB exceeds limit ${sizeLimit} KB`);
+          if (depthLimit) {
+            Logger.log(`returning truncated reading`);
+            return {
+              isError: true,
+              content: [
+                {
+                  type: "text",
+                  text: `The data size of file ${fileKey} ${nodeId ? `node ${nodeId}` : ""} is ${formattedResultSize} KB, exceeded the limit of ${sizeLimit} KB, please performing truncated reading`,
+                },
+              ],
+            };
+          } else {
+            const newFile = removeUnusedComponentsAndStyles(file);
+            const result = transformDesign(newFile);
+            formattedResult = getFormattedResult(result);
+            formattedResultSize = calcStringSize(formattedResult);
+            Logger.log(
+              `Data size exceeds ${sizeLimit} KB, but depth has been set to 1, removed unused components and component sets, size: ${formattedResultSize} KB`,
+            );
+
+            if (formattedResultSize > sizeLimit) {
+              formattedResult = JSON.stringify(result);
+              formattedResultSize = calcStringSize(formattedResult);
+              Logger.log(
+                `Data size still exceeds ${sizeLimit} KB, returning compressed JSON, size: ${formattedResultSize} KB`,
+              );
+            }
+          }
         }
 
         Logger.log("Sending result to client");
