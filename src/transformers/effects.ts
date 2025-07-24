@@ -7,7 +7,7 @@ import type {
   BlendMode,
   Node as FigmaDocumentNode,
 } from "@figma/rest-api-spec";
-import { formatRGBAColor } from "~/utils/common.js";
+import { formatRGBAColor } from "~/transformers/style.js";
 import { hasValue } from "~/utils/identity.js";
 
 export type SimplifiedEffects = {

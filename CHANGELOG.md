@@ -1,5 +1,31 @@
 # figma-developer-mcp
 
+## 0.5.0
+
+### Minor Changes
+
+- [#197](https://github.com/GLips/Figma-Context-MCP/pull/197) [`d67ff14`](https://github.com/GLips/Figma-Context-MCP/commit/d67ff143347bb1dbc152157b75d6e8b290dabb0f) Thanks [@GLips](https://github.com/GLips)! - Improve structure of MCP files, change strategy used for parsing Figma files to make it more flexible and extensible.
+
+- [#199](https://github.com/GLips/Figma-Context-MCP/pull/199) [`a8b59bf`](https://github.com/GLips/Figma-Context-MCP/commit/a8b59bf079128c9dba0bf6d8cd1601b8a6654b88) Thanks [@GLips](https://github.com/GLips)! - Add support for pattern fills in Figma.
+
+- [#203](https://github.com/GLips/Figma-Context-MCP/pull/203) [`edf4182`](https://github.com/GLips/Figma-Context-MCP/commit/edf41826f5bd4ebe6ea353a9c9b8be669f0ae659) Thanks [@GLips](https://github.com/GLips)! - Add support for Fill, Fit, Crop and Tile image types in Figma. Adds image post-processing step.
+
+### Patch Changes
+
+- [#202](https://github.com/GLips/Figma-Context-MCP/pull/202) [`4a44681`](https://github.com/GLips/Figma-Context-MCP/commit/4a44681903f1c071c5892454d19370ed89ecd0a3) Thanks [@GLips](https://github.com/GLips)! - Add --skip-image-downloads option to CLI args and SKIP_IMAGE_DOWNLOADS env var to hide the download image tool when set.
+
+## 0.4.3
+
+### Patch Changes
+
+- [#179](https://github.com/GLips/Figma-Context-MCP/pull/179) [`17988a0`](https://github.com/GLips/Figma-Context-MCP/commit/17988a0b5543330c6b8f7f24baa33b65a0da7957) Thanks [@GLips](https://github.com/GLips)! - Update curl command in fetchWithRetry to include error handling options, ensure errors are actually caught properly and returned to users.
+
+## 0.4.2
+
+### Patch Changes
+
+- [#170](https://github.com/GLips/Figma-Context-MCP/pull/170) [`d560252`](https://github.com/GLips/Figma-Context-MCP/commit/d56025286e8c3c24d75f170974c12f96d32fda8b) Thanks [@GLips](https://github.com/GLips)! - Add support for custom .env files.
+
 ## 0.4.1
 
 ### Patch Changes

@@ -5,7 +5,7 @@ import { config } from "dotenv";
 import { resolve } from "path";
 import { getServerConfig } from "./config.js";
 import { startHttpServer } from "./server.js";
-import { createServer } from "./mcp.js";
+import { createServer } from "./mcp/index.js";
 
 // Load .env from the current working directory
 config({ path: resolve(process.cwd(), ".env") });
@@ -16,9 +16,10 @@ export async function startServer(): Promise<void> {
 
   const config = getServerConfig(isStdioMode);
 
-  const server = createServer(config.auth, { 
-    isHTTP: !isStdioMode, 
-    outputFormat: config.outputFormat 
+  const server = createServer(config.auth, {
+    isHTTP: !isStdioMode,
+    outputFormat: config.outputFormat,
+    skipImageDownloads: config.skipImageDownloads,
   });
 
   if (isStdioMode) {
