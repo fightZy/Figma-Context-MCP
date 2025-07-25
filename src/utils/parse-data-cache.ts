@@ -1,8 +1,7 @@
 import { LRUCache } from "./lru.js";
 import { Logger } from "./logger.js";
-import type { SimplifiedDesign, SimplifiedNode } from "../services/simplify-node-response.js";
 import type { GetFileMetaResponse } from "@figma/rest-api-spec";
-import { writeLogs } from "./write-log.js";
+import type { SimplifiedDesign, SimplifiedNode } from "~/extractors/types.js";
 
 interface CacheItem {
   data: SimplifiedDesign;

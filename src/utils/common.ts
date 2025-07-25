@@ -1,5 +1,7 @@
 import fs from "fs";
 import path from "path";
+import type { GlobalVars, SimplifiedDesign, SimplifiedNode } from "~/extractors/types.js";
+import type { SimplifiedComponentDefinition, SimplifiedComponentSetDefinition } from "~/transformers/component.js";
 
 export type StyleId = `${string}_${string}` & { __brand: "StyleId" };
 
