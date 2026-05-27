@@ -1,0 +1,56 @@
+src/tests/layout-alignment.test.ts
+  20a503d6bf4dfd96 248-266
+src/transformers/layout.ts
+  20a503d6bf4dfd96 185-191,226-228,231,237
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.3.16",
+  "base_commit_sha": "6ed339d843ecc298feb114bd63f6a0ac4608422f",
+  "prompts": {
+    "20a503d6bf4dfd96": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "62f05784-2609-4e3f-a1c4-e5731f577ef5",
+        "model": "gpt-5.5"
+      },
+      "human_author": "zhangye <zhangye12436@cvte.com>",
+      "messages": [],
+      "total_additions": 29,
+      "total_deletions": 2,
+      "accepted_lines": 31,
+      "overriden_lines": 0
+    },
+    "ab15ef1738fb9ff8": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "ddae21a2-6853-42ef-8edf-ab2012831b39",
+        "model": "composer-2.5"
+      },
+      "human_author": "zhangye <zhangye12436@cvte.com>",
+      "messages": [],
+      "total_additions": 132,
+      "total_deletions": 0,
+      "accepted_lines": 132,
+      "overriden_lines": 0
+    },
+    "fbd0a7434a0e56c7": {
+      "agent_id": {
+        "tool": "known_human",
+        "id": "known_human_session",
+        "model": "unknown"
+      },
+      "human_author": "zhangye <zhangye12436@cvte.com>",
+      "messages": [],
+      "total_additions": 27,
+      "total_deletions": 7,
+      "accepted_lines": 0,
+      "overriden_lines": 0
+    }
+  },
+  "humans": {
+    "h_b7077a27f0d080": {
+      "author": "zhangye"
+    }
+  }
+}
