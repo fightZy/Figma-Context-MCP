@@ -183,6 +183,13 @@ function buildSimplifiedFrameValues(n: FigmaDocumentNode): SimplifiedLayout | { 
   return frameValues;
 }
 
+function getParentAutoLayoutMode(parent?: FigmaDocumentNode): "row" | "column" | undefined {
+  if (!isFrame(parent)) return undefined;
+  if (parent.layoutMode === "HORIZONTAL") return "row";
+  if (parent.layoutMode === "VERTICAL") return "column";
+  return undefined;
+}
+
 function buildSimplifiedLayoutValues(
   n: FigmaDocumentNode,
   parent: FigmaDocumentNode | undefined,
@@ -217,15 +224,18 @@ function buildSimplifiedLayoutValues(
   // Handle dimensions based on layout growth and alignment
   if (isRectangle("absoluteBoundingBox", n)) {
     const dimensions: { width?: number; height?: number; aspectRatio?: number } = {};
+    const sizingMode = isInAutoLayoutFlow(n, parent)
+      ? (getParentAutoLayoutMode(parent) ?? mode)
+      : mode;
 
     // Only include dimensions that aren't meant to stretch
-    if (mode === "row") {
+    if (sizingMode === "row") {
       // AutoLayout row, only include dimensions if the node is not growing
       if (!n.layoutGrow && n.layoutSizingHorizontal == "FIXED")
         dimensions.width = n.absoluteBoundingBox.width;
       if (n.layoutAlign !== "STRETCH" && n.layoutSizingVertical == "FIXED")
         dimensions.height = n.absoluteBoundingBox.height;
-    } else if (mode === "column") {
+    } else if (sizingMode === "column") {
       // AutoLayout column, only include dimensions if the node is not growing
       if (n.layoutAlign !== "STRETCH" && n.layoutSizingHorizontal == "FIXED")
         dimensions.width = n.absoluteBoundingBox.width;

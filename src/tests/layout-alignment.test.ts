@@ -245,4 +245,23 @@ describe("layout alignment", () => {
       expect(buildSimplifiedLayout(node).alignItems).toBe("center");
     });
   });
+
+  describe("dimensions in parent auto layout", () => {
+    test("keeps fixed height when a row child stretches across a column parent", () => {
+      const parent = makeFrame({
+        layoutMode: "VERTICAL",
+        absoluteBoundingBox: { x: 0, y: 0, width: 536, height: 158 },
+      });
+      const child = makeFrame({
+        layoutMode: "HORIZONTAL",
+        absoluteBoundingBox: { x: 0, y: 80, width: 536, height: 78 },
+        layoutAlign: "STRETCH",
+        layoutGrow: 0,
+        layoutSizingHorizontal: "FILL",
+        layoutSizingVertical: "FIXED",
+      });
+
+      expect(buildSimplifiedLayout(child, parent).dimensions).toEqual({ height: 78 });
+    });
+  });
 });
